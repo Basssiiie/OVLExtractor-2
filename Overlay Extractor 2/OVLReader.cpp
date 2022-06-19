@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "OVLReader.h"
 
-string OVLReader::PointerdataAtOffset(ulong offset)
+std::string OVLReader::PointerdataAtOffset(ulong offset)
 {
 	ulong i = 0, j = 0;
 	for(j = 0; j < 2; j++)
@@ -10,7 +10,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].symbolstring[i].internal_offset == offset)
 			{
-				string rv = "string ";
+				std::string rv = "string ";
 				rv.append(OVLD[j].symbolstring[i].data);
 				return rv;
 			}
@@ -23,7 +23,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].symbolpointers[i].internal_offset == offset)
 			{
-				string rv = "symbolstruct with string ";
+				std::string rv = "symbolstruct with string ";
 				rv.append(GetStringFromOffset(OVLD[j].symbolpointers[i].stringpointer));
 				return rv;
 			}
@@ -36,7 +36,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].linkedfiles[i].loaderreference.datapointer == offset)
 			{
-				string rv = "datablock of ";
+				std::string rv = "datablock of ";
 				rv.append(GetStringFromOffset(OVLD[j].linkedfiles[i].symbolresolve.stringpointer));
 				return rv;
 			}
@@ -49,7 +49,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].loaderreference[i].internal_offset == offset)
 			{
-				string rv = "loaderrefence ";
+				std::string rv = "loaderrefence ";
 				Loader ldr = GetLoaderByID(OVLD[j].loaderreference[i].loadernumber, j);
 				rv.append(ldr.name);
 				//Code for symbol pointer to string here?
@@ -64,7 +64,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].loaderreference[i].datapointer == offset)
 			{
-				string rv = "datablock of stringless loaderrefence from loader ";
+				std::string rv = "datablock of stringless loaderrefence from loader ";
 				Loader ldr = GetLoaderByID(OVLD[j].loaderreference[i].loadernumber, j);
 				rv.append(ldr.name);
 				return rv;
@@ -78,7 +78,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].symbolresolves[i].pointer == offset)
 			{
-				string rv = "symbol resolve data ";
+				std::string rv = "symbol resolve data ";
 				rv.append(GetStringFromOffset(OVLD[j].symbolresolves[i].stringpointer));
 				return rv;
 			}
@@ -91,7 +91,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].presolvedfurtherdata[i].offset == offset)
 			{
-				string rv = "extended data of ";
+				std::string rv = "extended data of ";
 				rv.append(OVLD[j].presolvedfurtherdata[i].name);
 				return rv;
 			}
@@ -104,7 +104,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 		{
 			if(OVLD[j].symbolpointers[i].datapointer == offset)
 			{
-				string rv = "incoming symbolstruct datapointer with string ";
+				std::string rv = "incoming symbolstruct datapointer with string ";
 				rv.append(GetStringFromOffset(OVLD[j].symbolpointers[i].stringpointer));
 				return rv;
 			}
@@ -113,7 +113,7 @@ string OVLReader::PointerdataAtOffset(ulong offset)
 	return "unknown";
 }
 
-string OVLReader::ReturnDatablocknameFromOffset(ulong offset, bool striptag)
+std::string OVLReader::ReturnDatablocknameFromOffset(ulong offset, bool striptag)
 {
 	ulong i = 0, j = 0;
 	for(j = 0; j < 2; j++)
@@ -122,7 +122,7 @@ string OVLReader::ReturnDatablocknameFromOffset(ulong offset, bool striptag)
 		{
 			if(OVLD[j].linkedfiles[i].loaderreference.datapointer == offset)
 			{
-				string rv = GetStringFromOffset(OVLD[j].linkedfiles[i].symbolresolve.stringpointer);
+				std::string rv = GetStringFromOffset(OVLD[j].linkedfiles[i].symbolresolve.stringpointer);
 				if(striptag)
 				{
 					Loader ldr = GetLoaderByID(OVLD[j].loaderreference[i].loadernumber, j);
@@ -139,7 +139,7 @@ string OVLReader::ReturnDatablocknameFromOffset(ulong offset, bool striptag)
 		{
 			if(OVLD[j].symbolresolves[i].pointer == offset)
 			{
-				string rv = GetStringFromOffset(OVLD[j].symbolresolves[i].stringpointer);
+				std::string rv = GetStringFromOffset(OVLD[j].symbolresolves[i].stringpointer);
 				/*if(striptag)
 				{
 					Loader ldr = GetLoaderByID(OVLD[j].loaderreference[i].loadernumber, j);
@@ -156,7 +156,7 @@ string OVLReader::ReturnDatablocknameFromOffset(ulong offset, bool striptag)
 		{
 			if(OVLD[j].loaderreference[i].datapointer == offset)
 			{
-				string rv = "UNRESOLVED_NULLPTR";
+				std::string rv = "UNRESOLVED_NULLPTR";
 				//Loader ldr = GetLoaderByID(OVLD[j].loaderreference[i].loadernumber, j);
 				//rv.append(ldr.name);
 				return rv;
@@ -167,14 +167,14 @@ string OVLReader::ReturnDatablocknameFromOffset(ulong offset, bool striptag)
 	return "UNRESOLVED_NULLPTR";
 }
 
-bool OVLReader::HasResource(string resourcename)
+bool OVLReader::HasResource(std::string resourcename)
 {
 	ulong j, i;
 	for(j = 0; j < 2; j++)
 	{
 		for(i = 0; i < OVLD[j].linkedfiles.size(); i++)
 		{
-			string currentresouce = GetStringFromOffset(OVLD[j].linkedfiles[i].symbolresolve.stringpointer);
+			std::string currentresouce = GetStringFromOffset(OVLD[j].linkedfiles[i].symbolresolve.stringpointer);
 			Debug::WriteLine("HasResource: " + gcnew String(currentresouce.c_str()) + " == " + gcnew String(resourcename.c_str()));
 			if(currentresouce == resourcename)
 				return true;
@@ -183,9 +183,9 @@ bool OVLReader::HasResource(string resourcename)
 	return false;
 }
 
-string OVLReader::GetStringA(FILE *&ovl, size_t size)
+std::string OVLReader::GetStringA(FILE *&ovl, size_t size)
 {
-	string returnstring;
+	std::string returnstring;
 	char *str = new char[size+1];
 	str[size] = 0;
 	fread(str,size,1,ovl);		
@@ -195,14 +195,14 @@ string OVLReader::GetStringA(FILE *&ovl, size_t size)
 	return returnstring;
 }
 
-string OVLReader::GetStringA(FILE *&ovl)
+std::string OVLReader::GetStringA(FILE *&ovl)
 {
 	ulong size = 0;
 	fpos_t readpos;
 	fgetpos(ovl, &readpos);
 	ulong temp = 0;
 	ulong i = 0;
-	string returnstring;
+	std::string returnstring;
 
 	do{
 		fread(&temp,1,1,ovl);
@@ -219,14 +219,14 @@ string OVLReader::GetStringA(FILE *&ovl)
 	return returnstring;
 }
 
-wstring OVLReader::GetStringW(FILE *&ovl)
+std::wstring OVLReader::GetStringW(FILE *&ovl)
 {
 	ulong size = 0;
 	fpos_t readpos;
 	fgetpos(ovl, &readpos);
 	ulong temp = 0;
 	ulong i = 0;
-	wstring returnstring;
+	std::wstring returnstring;
 
 	bool nulled = false;
 	bool nulled2 = false;
@@ -310,7 +310,7 @@ bool OVLReader::IsReloc(ulong offset)
 	return false;
 }
 
-string OVLReader::GetStringFromOffset(ulong offset)
+std::string OVLReader::GetStringFromOffset(ulong offset)
 {
 	ulong i = 0;
 	for(i = 0; i < OVLD[0].symbolstring.size(); i++)
@@ -337,7 +337,7 @@ Loader OVLReader::GetLoaderByID(ulong id, ulong currentOVL)
 
 
 
-OVLReader::OVLReader(string filename)
+OVLReader::OVLReader(std::string filename)
 {
 	ovlreaded = false;
 	lasterror = "No Overlay has been loaded by the reader!";
@@ -361,7 +361,7 @@ OVLReader::OVLReader(string filename)
 	ovlreaded = true;
 }
 
-bool OVLReader::ReadOVL(string ovlname, ulong currentOVL, int &offset)
+bool OVLReader::ReadOVL(std::string ovlname, ulong currentOVL, int &offset)
 {
 	ulong i = 0;
 	ulong j = 0;
@@ -803,7 +803,7 @@ bool OVLReader::ReadOVL(string ovlname, ulong currentOVL, int &offset)
 			if(OVLD[currentOVL].symbolpointers[z].internal_offset == OVLD[currentOVL].loaderreference[i].symbolstructpointer)
 				stringpointer = OVLD[currentOVL].symbolpointers[z].stringpointer;
 		}
-		string symbol = (stringpointer != 0xFEFFFFFF)?GetStringFromOffset(stringpointer):"";
+		std::string symbol = (stringpointer != 0xFEFFFFFF)?GetStringFromOffset(stringpointer):"";
 		ulong temp, temp2, temp3;		
 		PositionReturn pr = OffsetToPosition(OVLD[currentOVL].loaderreference[i].datapointer);
 		fseek(ovl, pr.position, SEEK_SET);
@@ -1019,7 +1019,7 @@ bool OVLReader::ReadOVL(string ovlname, ulong currentOVL, int &offset)
 					ulong times;					
 					fseek(newovl, (8*4), SEEK_CUR);
 					fread(&temp, 4, 1, newovl);
-					string animname = GetStringFromOffset(temp);
+					std::string animname = GetStringFromOffset(temp);
 					fread(&times, 4, 1, newovl);
 
 					prs.size = times;

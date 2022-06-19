@@ -1,7 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlay Extractor 2", "Overlay Extractor 2\Overlay Extractor 2.vcxproj", "{846A9080-518E-457D-808A-278BBCD1D685}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C0FA82E-833C-4186-B84A-C82A47021F26}"
+	ProjectSection(SolutionItems) = preProject
+		MMS Research V2.txt = MMS Research V2.txt
+		Nonused_Loaders.txt = Nonused_Loaders.txt
+		README.md = README.md
+		WAS_intern.txt = WAS_intern.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,5 +26,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76452479-F17E-4B53-AF34-AAD1B304E31C}
 	EndGlobalSection
 EndGlobal

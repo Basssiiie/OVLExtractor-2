@@ -13,7 +13,6 @@
 #include "OVLReader.h"
 #include "SFStructs.h"
 
-using namespace std;
 using namespace System::IO; 
 using namespace System::Diagnostics;
 
@@ -113,8 +112,8 @@ namespace OverlayExtractor2 {
 					MessageBox::Show("Error: File is no OVL");
 					return;
 				}
-				string filepathandname;
-				string safefilename;
+				std::string filepathandname;
+				std::string safefilename;
 				String^ result;
 				if(args[0]->Contains(".unique.ovl"))
 				{
@@ -131,7 +130,7 @@ namespace OverlayExtractor2 {
 				this->Text = formtitle + " | " + result;
 				if(! OVL.IsValid())
 				{
-					string err = OVL.GetLastReadingError();
+					std::string err = OVL.GetLastReadingError();
 					MessageBox::Show("Error: Could not open Overlay.\r\r\n" + gcnew String(err.c_str()));
 					return;
 				}
@@ -145,7 +144,7 @@ namespace OverlayExtractor2 {
 					for(ulong i = 0; i < lf.size(); i++)
 					{
 						String^ str;
-						string symbol	= OVL.GetStringFromOffset(lf[i].symbolresolve.stringpointer);						 
+						std::string symbol	= OVL.GetStringFromOffset(lf[i].symbolresolve.stringpointer);
 						Loader ldr		= OVL.GetLoaderByID(lf[i].loaderreference.loadernumber, C_OVL);
 						str = gcnew String(ldr.tag.c_str()) + "  |  " + gcnew String(symbol.c_str());
 
@@ -602,7 +601,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 return wcstombs( target, wch, len ) != -1;
 			 }
 
-	private: bool ToString( String^ source, string &target )
+	private: bool ToString( String^ source, std::string &target )
 			 {
 				 pin_ptr<const wchar_t> wch = PtrToStringChars( source );
 				 int len = (( source->Length+1) * 2);
@@ -614,7 +613,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 }
 
 			 //Zonder pointer comment
-	private: void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, ulong data, string comment, bool isreloc)
+	private: void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, ulong data, std::string comment, bool isreloc)
 			 {
 				 //TConvert tc;tc.ulong = data;
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%d(=$%X) %s",pos, offset, "long", name.c_str(),(isreloc)?"-> ":"", data, data, comment.c_str());
@@ -632,7 +631,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 }
 				 fprintf(dumpfile, "\r\n");
 			 }
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, ushort data, string comment, bool isreloc)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, ushort data, std::string comment, bool isreloc)
 			 {
 				 //TConvert tc;tc.ulong = data;
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%d(=$%X) %s",pos, offset, "short", name.c_str(),(isreloc)?"-> ":"", data, data, comment.c_str());
@@ -650,7 +649,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 }
 				 fprintf(dumpfile, "\r\n");
 			 }
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, float data, string comment, bool isreloc)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, float data, std::string comment, bool isreloc)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%f %s",pos, offset, "float", name.c_str(),(isreloc)?"-> ":"", data, comment.c_str());
 				 if(isreloc)
@@ -667,7 +666,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 }
 				 fprintf(dumpfile, "\r\n");
 			 }
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, string data, string comment, bool isreloc)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, std::string data, std::string comment, bool isreloc)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s %s",pos, offset, "text", name.c_str(), data.c_str(), comment.c_str());
 				 if(isreloc)
@@ -686,7 +685,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 }
 
 			 //Met pointer comment
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, ulong data, string comment, bool isreloc, string reloccomment)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, ulong data, std::string comment, bool isreloc, std::string reloccomment)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%d(=$%X) %s",pos, offset, "long", name.c_str(),(isreloc)?"-> ":"", data, data, comment.c_str());
 				 if(isreloc)
@@ -703,7 +702,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 }
 				 fprintf(dumpfile, "\r\n");
 			 }
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, ushort data, string comment, bool isreloc, string reloccomment)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, ushort data, std::string comment, bool isreloc, std::string reloccomment)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%d(=$%X) %s",pos, offset, "short", name.c_str(),(isreloc)?"-> ":"", data, data, comment.c_str());
 				 if(isreloc)
@@ -720,7 +719,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 }
 				 fprintf(dumpfile, "\r\n");
 			 }
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, float data, string comment, bool isreloc, string reloccomment)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, float data, std::string comment, bool isreloc, std::string reloccomment)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%f(=$%X) %s",pos, offset, "float", name.c_str(),(isreloc)?"-> ":"", data, data, comment.c_str());
 				 if(isreloc)
@@ -737,7 +736,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 }
 				 fprintf(dumpfile, "\r\n");
 			 }
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, string data, string comment, bool isreloc, string reloccomment)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, std::string data, std::string comment, bool isreloc, std::string reloccomment)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s %s",pos, offset, "text", name.c_str(), data.c_str(), comment.c_str());
 				 if(isreloc)
@@ -756,7 +755,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 }
 
 			 //Met pointercomment en type
-			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, ulong data, string type, string comment, bool isreloc, string reloccomment)
+			 void PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, ulong data, std::string type, std::string comment, bool isreloc, std::string reloccomment)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s%d(=$%X) %s",pos, offset, type.c_str(), name.c_str(),(isreloc)?"-> ":"", data, data, comment.c_str());
 				 if(isreloc)
@@ -775,7 +774,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 }
 
 			 //Unknown met pointercomment en type
-			 void PostVarUnknown(FILE *&dumpfile, ulong pos, ulong offset, string name, TConvert data, string type, string comment, bool isreloc, string reloccomment)
+			 void PostVarUnknown(FILE *&dumpfile, ulong pos, ulong offset, std::string name, TConvert data, std::string type, std::string comment, bool isreloc, std::string reloccomment)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  %s($%X ($%X $%X $%X $%X) == %d) %s",pos, offset, type.c_str(), name.c_str(),(isreloc)?"-> ":"", data.ul, data.c[0], data.c[1], data.c[2], data.c[3], data.ul, comment.c_str());
 				 if(isreloc)
@@ -793,7 +792,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 fprintf(dumpfile, "\r\n");
 			 }
 
-			 void DumpVertex(FILE *&dumpfile, ulong pos, ulong offset, string name, MorhpMeshVertex mmv, string type, string comment, bool isreloc)
+			 void DumpVertex(FILE *&dumpfile, ulong pos, ulong offset, std::string name, MorhpMeshVertex mmv, std::string type, std::string comment, bool isreloc)
 			 {
 				 fprintf(dumpfile, "%-5.5X  %-5.5X  %-5.5s  %40.40s  X%d Y%d Z%d (X$%X Y$%X Z$%X) %s",pos, offset, type.c_str(), name.c_str(), mmv.X, mmv.Y, mmv.Z, mmv.X, mmv.Y, mmv.Z, comment.c_str());
 				 fprintf(dumpfile, "\r\n");
@@ -861,19 +860,19 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 fprintf(html, "\r\n");
 			 }
 
-			 string returnHeader(string naam){
-				 string tijdelijk = "\r\n======================================================\r\n" + naam + "\r\n======================================================\r\n";
+			 std::string returnHeader(std::string naam){
+				 std::string tijdelijk = "\r\n======================================================\r\n" + naam + "\r\n======================================================\r\n";
 				 return tijdelijk;
 			 }
 
-			 string GetStringA(FILE *&ovl)
+			 std::string GetStringA(FILE *&ovl)
 			 {
 				 ulong size = 0;
 				 fpos_t readpos;
 				 fgetpos(ovl, &readpos);
 				 ulong temp = 0;
 				 ulong i = 0;
-				 string returnstring;
+				 std::string returnstring;
 
 				 do{
 					 fread(&temp,1,1,ovl);
@@ -890,14 +889,14 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 return returnstring;
 			 }
 
-			 wstring GetStringW(FILE *&ovl)
+			 std::wstring GetStringW(FILE *&ovl)
 			 {
 				 ulong size = 0;
 				 fpos_t readpos;
 				 fgetpos(ovl, &readpos);
 				 ulong temp = 0;
 				 ulong i = 0;
-				 wstring returnstring;
+				 std::wstring returnstring;
 
 				 bool nulled = false;
 				 bool nulled2 = false;
@@ -927,39 +926,39 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 return returnstring;
 			 }
 
-			 void ValidateXMLString(string& str)
+			 void ValidateXMLString(std::string& str)
 			 {
 				 size_t pos;
 				 pos = str.find("'");
-				 while (pos != string::npos)
+				 while (pos != std::string::npos)
 				 {
 					 str.replace(pos, 1, "&apos;");
 					 pos = str.find("'");
 				 }
 
 				 /*pos = str.find("\"");
-				 while (pos != string::npos)
+				 while (pos != std::string::npos)
 				 {
 				 str.replace(pos, 1, "&quot;");
 				 pos = str.find("\"");
 				 }
 
 				 pos = str.find("&");
-				 while (pos != string::npos)
+				 while (pos != std::string::npos)
 				 {
 				 str.replace(pos, 1, "&amp;");
 				 pos = str.find("&");
 				 }
 
 				 pos = str.find("<");
-				 while (pos != string::npos)
+				 while (pos != std::string::npos)
 				 {
 				 str.replace(pos, 1, "&lt;");
 				 pos = str.find("<");
 				 }
 
 				 pos = str.find(">");
-				 while (pos != string::npos)
+				 while (pos != std::string::npos)
 				 {
 				 str.replace(pos, 1, "&gt;");
 				 pos = str.find(">");
@@ -969,8 +968,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 	private: System::Void openOVLToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {				 
 				 OpenFileDialog ^ofd = gcnew OpenFileDialog();
 				 ofd->CheckFileExists = true;
-				 string safefilename;
-				 string filepathandname;
+				 std::string safefilename;
+				 std::string filepathandname;
 				 try {
 					 ofd->Filter = "Overlay|*.common.ovl|Overlay v6|*.ovl";
 					 ofd->Title = "Selecteer een Overlay bestand";
@@ -991,7 +990,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 OVL.safefilename = safefilename;
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Could not open Overlay.\r\r\n" + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -1005,7 +1004,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 for(ulong i = 0; i < lf.size(); i++)
 					 {
 						 String^ str;
-						 string symbol	= OVL.GetStringFromOffset(lf[i].symbolresolve.stringpointer);						 
+						 std::string symbol	= OVL.GetStringFromOffset(lf[i].symbolresolve.stringpointer);						 
 						 Loader ldr		= OVL.GetLoaderByID(lf[i].loaderreference.loadernumber, C_OVL);
 						 str = gcnew String(ldr.tag.c_str()) + "  |  " + gcnew String(symbol.c_str());
 
@@ -1048,7 +1047,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 //Debug::WriteLine("File unique");
 				 }
 
-				 string symbol	= OVL.GetStringFromOffset(lf[selectedindex].symbolresolve.stringpointer);
+				 std::string symbol	= OVL.GetStringFromOffset(lf[selectedindex].symbolresolve.stringpointer);
 
 				 Loader ldr		= OVL.GetLoaderByID(lf[selectedindex].loaderreference.loadernumber, C_OVL);
 
@@ -1058,7 +1057,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 
 				 FILE *ovl;
 				 FILE *dmp;
-				 string dumpname = symbol;
+				 std::string dumpname = symbol;
 				 dumpname.erase((dumpname.end() - ldr.tag.length() -1), dumpname.end());
 
 				 if(fopen_s(&ovl, OVLD.ovlname.c_str(), "rb") == EINVAL)
@@ -1076,7 +1075,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 dumpname.append(".txt");
 					 if(fopen_s(&dmp, dumpname.c_str(), "wb") != EINVAL)
 					 {
-						 wstring tstr = GetStringW(ovl);
+						 std::wstring tstr = GetStringW(ovl);
 						 fwrite(tstr.c_str(), tstr.length()*2, 1, dmp);
 						 //MessageBox::Show("File saved");
 						 fclose(dmp);
@@ -1186,7 +1185,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -1198,8 +1197,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 ulong ovlversion = OVLD.h1.version;
 				 PositionReturn pr = OVL.OffsetToPosition(0);
 
-				 string filename = "OverlayDump_";
-				 string ovlname = OVL.safefilename;
+				 std::string filename = "OverlayDump_";
+				 std::string ovlname = OVL.safefilename;
 				 ovlname.erase(ovlname.end() - 11, ovlname.end());
 				 filename.append(ovlname);
 				 if (currentOVL == 0)
@@ -1281,7 +1280,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 						 fprintf(html, "//Internal offset: $%X(%d) - $%X(%d)\r\n", OVLD.chunks[i].blocks[j].internal_offset, OVLD.chunks[i].blocks[j].internal_offset,offsetend,offsetend);
 						 fprintf(html, "//Part position: $%X(%d) - $%X(%d)\r\n", OVLD.chunks[i].blocks[j].position, OVLD.chunks[i].blocks[j].position, positionend, positionend);
 						 fprintf(html, "//Block length: $%X(%d)\r\n", offsetend-OVLD.chunks[i].blocks[j].internal_offset,offsetend-OVLD.chunks[i].blocks[j].internal_offset);
-						 //PostVar(FILE *&dumpfile, ulong pos, ulong offset, string name, ulong data, string comment, bool isreloc, string relocdata)
+						 //PostVar(FILE *&dumpfile, ulong pos, ulong offset, std::string name, ulong data, std::string comment, bool isreloc, std::string relocdata)
 
 						 if(i == 0 && j == 0 && currentoffset < stringlessdata.datapointer && currentoffset < presolveddata.offset && currentoffset < data.loaderreference.datapointer)
 							 fprintf(html, "STRINGTABLE\r\n");
@@ -1301,7 +1300,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 						 {
 							 do{
 								 fgetpos(ovl, &position);
-								 string str = GetStringA(ovl);								 
+								 std::string str = GetStringA(ovl);								 
 								 PostVar(html, position, currentoffset, "String", str, "", (currentoffset == reloc));
 								 currentoffset += str.length() + 1;
 							 } while (currentoffset < currentblocksize);
@@ -1370,7 +1369,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 {
 								 fread(&ultemp, 4, 1, ovl);
 								 Loader ldr = OVL.GetLoaderByID(ultemp, currentOVL);
-								 string loader = "(loader ";loader.append(ldr.name);loader.append(")");
+								 std::string loader = "(loader ";loader.append(ldr.name);loader.append(")");
 								 PostVar(html, position, currentoffset, "Loader number", ultemp, loader, (currentoffset == reloc));
 								 if(currentoffset == reloc)
 									 reloc = GetNearestRelocation(OVLD.relocations, reloc);	
@@ -1420,7 +1419,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 }
 						 } else {
 							 do{
-								 string type = "long";
+								 std::string type = "long";
 								 //currentoffset
 								 ulong firstrelockind = min(reloc, min(relocpointto, data.loaderreference.datapointer));
 								 if(position + 4 > (OVLD.chunks[i].blocks[j].size + OVLD.chunks[i].blocks[j].position) /*|| currentoffset + 4 > firstrelockind*/)//UNCOMMENT ALS FOUT IS GEFIXT
@@ -1451,7 +1450,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 									 if(currentoffset >= data.loaderreference.datapointer)
 									 {
 										 Loader ldr = OVL.GetLoaderByID( data.loaderreference.loadernumber, currentOVL);
-										 string symbol	= OVL.GetStringFromOffset(data.symbolresolve.stringpointer);
+										 std::string symbol	= OVL.GetStringFromOffset(data.symbolresolve.stringpointer);
 										 fprintf(html, "DATA OF %s (type:%s)\r\n", symbol.c_str(), ldr.name.c_str());
 										 fprintf(html, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
 										 ulong lastoffset = currentoffset;
@@ -1912,7 +1911,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 {
 												 char *str = (char*)malloc((sizeof(int)*8+1));
 												 _itoa(z, str,10);
-												 string varname = "LowerUniformColour";
+												 std::string varname = "LowerUniformColour";
 												 varname.append(str);
 												 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, varname, ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
@@ -1922,7 +1921,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 {
 												 char *str = (char*)malloc((sizeof(int)*8+1));
 												 _itoa(z, str,10);
-												 string varname = "UpperUniformColour";
+												 std::string varname = "UpperUniformColour";
 												 varname.append(str);
 												 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, varname, ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
@@ -2011,7 +2010,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 										 fprintf(html, "EXTENDED DATA OF %s\r\n", presolveddata.name.c_str());
 										 fprintf(html, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n");
 										 ulong lastoffset = currentoffset;
-										 if(presolveddata.name.find("SVD LODPOINTER LIST OF") != string::npos)
+										 if(presolveddata.name.find("SVD LODPOINTER LIST OF") != std::string::npos)
 										 {
 #pragma region SVD LODPOINTER
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2020,7 +2019,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("WAS UNKNOWN-A DATABLOCK") != string::npos)
+										 } else if(presolveddata.name.find("WAS UNKNOWN-A DATABLOCK") != std::string::npos)
 										 {
 #pragma region WAS DATABLOCK-A
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Unknown 1", ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
@@ -2036,7 +2035,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Unknown 6", ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 #pragma endregion
-										 } else if(presolveddata.name.find("WAS UNKNOWN-B DATABLOCK") != string::npos)
+										 } else if(presolveddata.name.find("WAS UNKNOWN-B DATABLOCK") != std::string::npos)
 										 {
 #pragma region WAS DATABLOCK-B
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Number of animals", ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
@@ -2058,7 +2057,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Unknown 7", ultemp, "(Mostly ~1-4)", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 #pragma endregion
-										 } else if(presolveddata.name.find("WAS UNKNOWN-B ANIMALLIST") != string::npos)
+										 } else if(presolveddata.name.find("WAS UNKNOWN-B ANIMALLIST") != std::string::npos)
 										 {
 #pragma region WAS UNKNOWN-B ANIMALLIST
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2067,7 +2066,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("ASD SPLINELIST") != string::npos)
+										 } else if(presolveddata.name.find("ASD SPLINELIST") != std::string::npos)
 										 {
 #pragma region ASD SPLINELIST
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2076,7 +2075,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("ASD UNKNOWN DATABLOCK-A") != string::npos)
+										 } else if(presolveddata.name.find("ASD UNKNOWN DATABLOCK-A") != std::string::npos)
 										 {
 #pragma region ASD DATABLOCK-A
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2087,7 +2086,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("SID SOUNDSCRIPT LIST") != string::npos)
+										 } else if(presolveddata.name.find("SID SOUNDSCRIPT LIST") != std::string::npos)
 										 {
 #pragma region SID SOUNDSCRIPT
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2096,7 +2095,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("SID SOUNDDATA") != string::npos)
+										 } else if(presolveddata.name.find("SID SOUNDDATA") != std::string::npos)
 										 {
 #pragma region SID SOUNDDATA
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Sound count", ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
@@ -2108,7 +2107,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Scriptreferences list", ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 #pragma endregion
-										 } else if(presolveddata.name.find("SID SOUNDEVENT SCRIPT") != string::npos)
+										 } else if(presolveddata.name.find("SID SOUNDEVENT SCRIPT") != std::string::npos)
 										 {
 #pragma region SID SOUNDEVENT SCRIPT
 											 float time;
@@ -2129,7 +2128,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 													 stop = true;
 											 } while (!stop);
 #pragma endregion
-										 } else if(presolveddata.name.find("MMS VERTEXUV'S") != string::npos)
+										 } else if(presolveddata.name.find("MMS VERTEXUV'S") != std::string::npos)
 										 {
 #pragma region MMS VERTEXUVS
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2145,7 +2144,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("MMS INDICES") != string::npos)
+										 } else if(presolveddata.name.find("MMS INDICES") != std::string::npos)
 										 {
 #pragma region MMS INDICES
 											 bool even = true;
@@ -2162,7 +2161,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 2;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("MMS MORPH DATA") != string::npos)
+										 } else if(presolveddata.name.find("MMS MORPH DATA") != std::string::npos)
 										 {
 #pragma region MMS MORPHDATA
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2204,7 +2203,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("MMS MORPH TIMES LIST ANIMATION") != string::npos)
+										 } else if(presolveddata.name.find("MMS MORPH TIMES LIST ANIMATION") != std::string::npos)
 										 {
 #pragma region MMS MORHP TIMES LIST
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2213,7 +2212,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);												 
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("MMS MORPH VERTEXPOSITIONS ANIMATION") != string::npos)
+										 } else if(presolveddata.name.find("MMS MORPH VERTEXPOSITIONS ANIMATION") != std::string::npos)
 										 {
 #pragma region MMS MORPH VERTEXPOSITIONS
 											 presolveddata = GetNearestFurtherData(OVLD.presolvedfurtherdata, lastoffset);
@@ -2226,7 +2225,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 for(ulong z = 0; z < presolveddata.count1; z++)
 											 {
 											 MorhpMeshVertex mmv;
-											 //DumpVertex(FILE *&dumpfile, ulong pos, ulong offset, string name, TConvert data, string type, string comment, bool isreloc)
+											 //DumpVertex(FILE *&dumpfile, ulong pos, ulong offset, std::string name, TConvert data, std::string type, std::string comment, bool isreloc)
 											 fread(&mmv, sizeof(MorhpMeshVertex), 1, ovl);DumpVertex(html, position, currentoffset, "MorphmeshVertex", mmv, "vrtx", "", (currentoffset == reloc));
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += sizeof(MorhpMeshVertex);fgetpos(ovl, &position);												 
 											 }
@@ -2234,7 +2233,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }*/
 #pragma endregion
-										 }  else if(presolveddata.name.find("MMS MORPH ATTACHMENT UNKNOWNS") != string::npos)
+										 }  else if(presolveddata.name.find("MMS MORPH ATTACHMENT UNKNOWNS") != std::string::npos)
 										 {
 #pragma region MMS MORPH ATTACHMENT
 											 presolveddata = GetNearestFurtherData(OVLD.presolvedfurtherdata, lastoffset);
@@ -2247,7 +2246,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 for(ulong z = 0; z < presolveddata.count1; z++)
 											 {
 											 MorhpMeshVertex mmv;
-											 //DumpVertex(FILE *&dumpfile, ulong pos, ulong offset, string name, TConvert data, string type, string comment, bool isreloc)
+											 //DumpVertex(FILE *&dumpfile, ulong pos, ulong offset, std::string name, TConvert data, std::string type, std::string comment, bool isreloc)
 											 fread(&mmv, sizeof(MorhpMeshVertex), 1, ovl);DumpVertex(html, position, currentoffset, "MorphmeshVertex", mmv, "vrtx", "", (currentoffset == reloc));
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += sizeof(MorhpMeshVertex);fgetpos(ovl, &position);												 
 											 }
@@ -2255,7 +2254,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }*/
 #pragma endregion
-										 } else if(presolveddata.name.find("VIEWINGGALLERY DATA") != string::npos)
+										 } else if(presolveddata.name.find("VIEWINGGALLERY DATA") != std::string::npos)
 										 {
 #pragma region VIEWINGGALLERY DATA
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Unknown", ultemp, "", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
@@ -2293,7 +2292,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 fread(&ultemp, 4, 1, ovl);PostVar(html, position, currentoffset, "Unknown ", ultemp, "// Seen 0", (currentoffset == reloc), (currentoffset == reloc)?OVL.PointerdataAtOffset(ultemp):"");
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 #pragma endregion
-										 } else if(presolveddata.name.find("PSI UV-COORDLIST OF") != string::npos)
+										 } else if(presolveddata.name.find("PSI UV-COORDLIST OF") != std::string::npos)
 										 {
 #pragma region PSI UV-COORDLIST
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2302,10 +2301,10 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("PSI UV-COORDINATE") != string::npos)
+										 } else if(presolveddata.name.find("PSI UV-COORDINATE") != std::string::npos)
 										 {
 #pragma region PSI UV-COORDINATE
-											 fread(&ftemp, 4, 1, ovl);string breuk = "(";int factor = ftemp/0.125000;char *str = (char*)malloc((sizeof(int)*8+1));_itoa(factor, str,10);breuk.append(str);breuk.append("/8)");
+											 fread(&ftemp, 4, 1, ovl);std::string breuk = "(";int factor = ftemp/0.125000;char *str = (char*)malloc((sizeof(int)*8+1));_itoa(factor, str,10);breuk.append(str);breuk.append("/8)");
 											 PostVar(html, position, currentoffset, "Left", ftemp, breuk, (currentoffset == reloc));
 											 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
 											 fread(&ftemp, 4, 1, ovl);breuk = "(";factor = ftemp/0.125000;_itoa(factor, str,10);breuk.append(str);breuk.append("/8)");
@@ -2320,14 +2319,14 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 											 
 											 delete[] str;
 #pragma endregion
-										 } else if(presolveddata.name.find("ENT UNKNOWNFLOATLIST OF") != string::npos)
+										 } else if(presolveddata.name.find("ENT UNKNOWNFLOATLIST OF") != std::string::npos)
 										 {
 #pragma region ENT UNKNOWNFLOATLIST
 											 for(ulong z = 0; z < presolveddata.size; z++)
 											 {
 												 char *str = (char*)malloc((sizeof(int)*8+1));
 												 _itoa(z, str,10);
-												 string varname = "UnknownFloat";
+												 std::string varname = "UnknownFloat";
 												 varname.append(str);
 												 fread(&ftemp, 4, 1, ovl);PostVar(html, position, currentoffset, varname, ftemp, "", (currentoffset == reloc));
 												 if(currentoffset >= reloc)reloc = GetNearestRelocation(OVLD.relocations, reloc);currentoffset += 4;fgetpos(ovl, &position);
@@ -2335,7 +2334,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 												 delete[] str;
 											 }
 #pragma endregion
-										 } else if(presolveddata.name.find("ENT BODYPART PPG-LIST OF") != string::npos)
+										 } else if(presolveddata.name.find("ENT BODYPART PPG-LIST OF") != std::string::npos)
 										 {
 #pragma region ENT BODYPART
 											 for(ulong z = 0; z < presolveddata.size; z++)
@@ -2519,7 +2518,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2541,7 +2540,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 	private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2552,7 +2551,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 for(ulong i = 0; i < lf.size(); i++)
 					 {
 						 String^ str;
-						 string symbol	= OVL.GetStringFromOffset(lf[i].symbolresolve.stringpointer);						 
+						 std::string symbol	= OVL.GetStringFromOffset(lf[i].symbolresolve.stringpointer);						 
 						 Loader ldr		= OVL.GetLoaderByID(lf[i].loaderreference.loadernumber, C_OVL);
 						 str = "Loader: '" + gcnew String(ldr.tag.c_str()) + "'  File: '" + gcnew String(symbol.c_str()) + "'\r\n";
 						 strlist += str;
@@ -2566,7 +2565,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2583,7 +2582,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 			 {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2605,7 +2604,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 OVLData OVLD = OVL.GetOVLD(j);
 					 for(ulong i = 0; i < OVLD.symbolresolves.size(); i++)
 					 {
-						 string strptr = OVL.GetStringFromOffset(OVLD.symbolresolves[i].stringpointer);
+						 std::string strptr = OVL.GetStringFromOffset(OVLD.symbolresolves[i].stringpointer);
 						 symbolresolvelist->Items->Add("Stringpointer: " + gcnew String(strptr.c_str()) + "  Pointing to: " + OVLD.symbolresolves[i].pointer + "\r\n");
 					 }
 				 }
@@ -2634,7 +2633,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 	private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2649,7 +2648,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 	private: System::Void button6_Click(System::Object^  sender, System::EventArgs^  e) {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2659,7 +2658,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 OVLData OVLD = OVL.GetOVLD(j);
 					 for(ulong i = 0; i < OVLD.symbolresolves.size(); i++)
 					 {
-						 string strptr = OVL.GetStringFromOffset(OVLD.symbolresolves[i].stringpointer);
+						 std::string strptr = OVL.GetStringFromOffset(OVLD.symbolresolves[i].stringpointer);
 						 strlist += "Stringpointer: " + gcnew String(strptr.c_str()) + "  Pointing to: " + OVLD.symbolresolves[i].pointer + "\r\n";
 					 }
 				 }
@@ -2674,7 +2673,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 	private: System::Void exportOVLMakeXMLToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }
@@ -2684,8 +2683,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 FILE* UOVL;
 				 FILE* XML;				 
 
-				 string filename = "OverlayXML_";
-				 string ovlname = OVL.safefilename;
+				 std::string filename = "OverlayXML_";
+				 std::string ovlname = OVL.safefilename;
 				 ovlname.erase(ovlname.end() - 11, ovlname.end());
 				 filename.append(ovlname);
 				 filename.append(".xml");
@@ -2719,11 +2718,11 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 					 lf = OVL.GetRawLinkedFiles(i);
 					 for(ulong j = 0; j < lf.size(); j++)
 					 {
-						 string symbol	= OVL.GetStringFromOffset(lf[j].symbolresolve.stringpointer);						 
+						 std::string symbol	= OVL.GetStringFromOffset(lf[j].symbolresolve.stringpointer);						 
 						 Loader ldr		= OVL.GetLoaderByID(lf[j].loaderreference.loadernumber, C_OVL);
 						 PositionReturn pr = OVL.OffsetToPosition(lf[j].loaderreference.datapointer);
 						 ulong startoffset = lf[j].loaderreference.datapointer;
-						 string symbolwol = symbol;
+						 std::string symbolwol = symbol;
 						 symbolwol.erase((symbolwol.end() - ldr.tag.length() -1), symbolwol.end());
 						 ValidateXMLString(symbolwol);
 
@@ -2732,7 +2731,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 						 bool found = true;
 						 if(ldr.tag == "txt")
 						 {	
-							 wstring tstr = GetStringW(ovl);
+							 std::wstring tstr = GetStringW(ovl);
 							 MakeIndents(XML, indentlevel);
 							 fprintf(XML, "<txt name='%s' type='text'>", symbolwol.c_str());
 							 fwrite(tstr.c_str(), tstr.length()*2, 1, XML);
@@ -2757,7 +2756,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 fseek(ovl2, pr.position, SEEK_SET);
 							 fread(&pos, 4, 4, ovl2);
 
-							 string texref = OVL.ReturnDatablocknameFromOffset((startoffset + 4), true);
+							 std::string texref = OVL.ReturnDatablocknameFromOffset((startoffset + 4), true);
 							 texref.erase((texref.end() - 4), texref.end());
 
 							 MakeIndents(XML, indentlevel);
@@ -2775,8 +2774,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 TrackSection tks;
 							 fread(&tks, sizeof(TrackSection), 1, ovl);
 							 MakeIndents(XML, indentlevel);
-							 string internalname = OVL.GetStringFromOffset(tks.internalname);
-							 string sidreference = OVL.ReturnDatablocknameFromOffset((startoffset + 4), true);
+							 std::string internalname = OVL.GetStringFromOffset(tks.internalname);
+							 std::string sidreference = OVL.ReturnDatablocknameFromOffset((startoffset + 4), true);
 							 sidreference.erase((sidreference.end() - 4), sidreference.end());
 							 fprintf(XML, "<tks name='%s' internalname='%s' sid='%s'>\r\n", symbolwol.c_str(), internalname.c_str(), sidreference.c_str());
 							 MakeIndents(XML, indentlevel + 1);
@@ -2786,9 +2785,9 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 fprintf(XML, "<splines>\r\n");
 							 //Splinecode
 							 MakeIndents(XML, indentlevel + 2);
-							 string leftspline = OVL.ReturnDatablocknameFromOffset((startoffset + (8*4)), true);
+							 std::string leftspline = OVL.ReturnDatablocknameFromOffset((startoffset + (8*4)), true);
 							 leftspline.erase((leftspline.end() - 4), leftspline.end());
-							 string rightspline = OVL.ReturnDatablocknameFromOffset((startoffset + (9*4)), true);
+							 std::string rightspline = OVL.ReturnDatablocknameFromOffset((startoffset + (9*4)), true);
 							 rightspline.erase((rightspline.end() - 4), rightspline.end());
 							 fprintf(XML, "<car left='%s' right='%s' />\r\n", leftspline.c_str(), rightspline.c_str());
 
@@ -2815,7 +2814,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 ParticleSkin psi;
 							 fread(&psi, sizeof(ParticleSkin), 1, ovl);
 							 MakeIndents(XML, indentlevel);
-							 string texreference = OVL.ReturnDatablocknameFromOffset((startoffset + 8), true);
+							 std::string texreference = OVL.ReturnDatablocknameFromOffset((startoffset + 8), true);
 							 texreference.erase((texreference.end() - 4), texreference.end());
 
 							 fprintf(XML, "<psi name='%s' texture='%s' type='%d' animationspeed='%f' unk1='%d'>\r\n", symbolwol.c_str(), texreference.c_str(), psi.flaga, psi.unknownmodifier, psi.unk1);
@@ -2844,14 +2843,14 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 						 } else if(ldr.tag == "sid"){
 							 SceneryItem sid;
 							 ulong tmp;
-							 string supports;
-							 string objecticon = OVL.ReturnDatablocknameFromOffset((startoffset + (22*4)), true);
+							 std::string supports;
+							 std::string objecticon = OVL.ReturnDatablocknameFromOffset((startoffset + (22*4)), true);
 							 objecticon.erase((objecticon.end() - 4), objecticon.end());
-							 string groupicon = OVL.ReturnDatablocknameFromOffset((startoffset + (23*4)), true);
+							 std::string groupicon = OVL.ReturnDatablocknameFromOffset((startoffset + (23*4)), true);
 							 groupicon.erase((groupicon.end() - 4), groupicon.end());							 
-							 string groupnametxt = OVL.ReturnDatablocknameFromOffset((startoffset + (24*4)), true);
+							 std::string groupnametxt = OVL.ReturnDatablocknameFromOffset((startoffset + (24*4)), true);
 							 groupnametxt.erase((groupnametxt.end() - 4), groupnametxt.end());
-							 string nametxt = OVL.ReturnDatablocknameFromOffset((startoffset + (30*4)), true);
+							 std::string nametxt = OVL.ReturnDatablocknameFromOffset((startoffset + (30*4)), true);
 							 nametxt.erase((nametxt.end() - 4), nametxt.end());							 
 							 fread(&sid, sizeof(SceneryItem), 1, ovl);
 
@@ -2860,10 +2859,10 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 							 FILE* ovl2 = (pr.currentOVL == 1) ? UOVL : COVL;
 							 fseek(ovl2, pr.position, SEEK_SET);
 							 fread(&tmp, 4, 1, ovl2);
-							 string svdname = OVL.ReturnDatablocknameFromOffset(tmp, true);
+							 std::string svdname = OVL.ReturnDatablocknameFromOffset(tmp, true);
 
 
-							 string ovlpath = OVL.GetStringFromOffset(sid.ovlpath);
+							 std::string ovlpath = OVL.GetStringFromOffset(sid.ovlpath);
 
 							 ValidateXMLString(nametxt);
 							 ValidateXMLString(ovlpath);
@@ -2908,7 +2907,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  decompileAllItemsToolStripM
 				 ulong offsetaddition = 24;
 				 if(! OVL.IsValid())
 				 {
-					 string err = OVL.GetLastReadingError();
+					 std::string err = OVL.GetLastReadingError();
 					 MessageBox::Show("Error: Overlay is not valid, reason: " + gcnew String(err.c_str()));
 					 return;
 				 }

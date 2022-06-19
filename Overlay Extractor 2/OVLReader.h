@@ -5,7 +5,6 @@
 
 #pragma warning(disable:4244) // FPOS_T to LONG
 
-using namespace std;
 using namespace System;
 using namespace System::Diagnostics;
 
@@ -80,15 +79,15 @@ struct V5Extra
 struct Reference
 {
 	ushort length;
-	string file;
+	std::string file;
 };
 
 struct Loader
 {
-	string loader;
-	string name;
+	std::string loader;
+	std::string name;
 	ulong type;
-	string tag;
+	std::string tag;
 };
 
 struct Block
@@ -108,7 +107,7 @@ struct SymbolString
 {
 	fpos_t pos;
 	ulong internal_offset;
-	string data;
+	std::string data;
 };
 
 struct SymbolStruct {
@@ -152,7 +151,7 @@ struct LinkedFiles
 struct PreResolved
 {
 	ulong offset;
-	string name;
+	std::string name;
 	ulong size;
 
 	ulong count1;
@@ -190,7 +189,7 @@ struct MDLUnknownEnum
 
 struct OVLData
 {
-	string						ovlname;
+	std::string					ovlname;
 	bool						hassymbolresolves;
 	ulong						num_references;
 	OVLHeader					h1;
@@ -240,32 +239,32 @@ struct TConvert
 class OVLReader
 {
 private:
-	string		lasterror;	
-	bool		ReadOVL(string ovlname, ulong currentOVL, int &offset);
-	bool		ovlreaded;
-	string		GetStringA(FILE *&ovl, size_t size);
-	string		GetStringA(FILE *&ovl);
-	wstring		GetStringW(FILE *&ovl);
-	OVLData		OVLD[2];
+	std::string		lasterror;
+	bool			ReadOVL(std::string ovlname, ulong currentOVL, int &offset);
+	bool			ovlreaded;
+	std::string		GetStringA(FILE *&ovl, size_t size);
+	std::string		GetStringA(FILE *&ovl);
+	std::wstring	GetStringW(FILE *&ovl);
+	OVLData			OVLD[2];
 public:
-	string		safefilename;
-	bool		HasResource(string resourcename);
-	string		ReturnDatablocknameFromOffset(ulong offset, bool striptag);
+	std::string		safefilename;
+	bool			HasResource(std::string resourcename);
+	std::string		ReturnDatablocknameFromOffset(ulong offset, bool striptag);
 
 	//INTERN	
-	std::vector<LinkedFiles>		GetRawLinkedFiles(ulong currentOVL){return OVLD[currentOVL].linkedfiles;};
-	std::vector<SymbolStruct>		GetRawSymbolReferences(ulong currentOVL){return OVLD[currentOVL].symbolpointers;};
-	std::vector<LoadReference>		GetRawLoaderReferences(ulong currentOVL){return OVLD[currentOVL].loaderreference;};
-	std::vector<SymbolResolve>		GetRawSymbolResolves(ulong currentOVL){return OVLD[currentOVL].symbolresolves;};
-	bool							IsValid(){return ovlreaded;}
-	OVLData							GetOVLD(ulong currentOVL){ return OVLD[currentOVL];}
-	string							GetLastReadingError(){return lasterror;}
+	std::vector<LinkedFiles>	GetRawLinkedFiles(ulong currentOVL){return OVLD[currentOVL].linkedfiles;};
+	std::vector<SymbolStruct>	GetRawSymbolReferences(ulong currentOVL){return OVLD[currentOVL].symbolpointers;};
+	std::vector<LoadReference>	GetRawLoaderReferences(ulong currentOVL){return OVLD[currentOVL].loaderreference;};
+	std::vector<SymbolResolve>	GetRawSymbolResolves(ulong currentOVL){return OVLD[currentOVL].symbolresolves;};
+	bool						IsValid(){return ovlreaded;}
+	OVLData						GetOVLD(ulong currentOVL){ return OVLD[currentOVL];}
+	std::string					GetLastReadingError(){return lasterror;}
 	//EXTERN
-	string							PointerdataAtOffset(ulong offset);
-	Loader							GetLoaderByID(ulong id, ulong currentOVL);
-	bool							IsReloc(ulong offset);
-	PositionReturn					OffsetToPosition(ulong offset);
-	string							GetStringFromOffset(ulong offset);
-	OVLReader(string filename);	
+	std::string		PointerdataAtOffset(ulong offset);
+	Loader			GetLoaderByID(ulong id, ulong currentOVL);
+	bool			IsReloc(ulong offset);
+	PositionReturn	OffsetToPosition(ulong offset);
+	std::string		GetStringFromOffset(ulong offset);
+	OVLReader(std::string filename);
 };
 
