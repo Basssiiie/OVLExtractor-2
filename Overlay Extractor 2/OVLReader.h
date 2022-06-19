@@ -16,7 +16,7 @@ struct OVLHeader
 {
 	ulong magic;
 	ulong headerversion;
-	ulong version;	
+	ulong version;
 };
 
 //Header part 2
@@ -128,7 +128,7 @@ struct LoadReference {
 	ulong internal_offset;
 };
 
-struct SymbolResolve{
+struct SymbolResolve {
 	ulong pointer;
 	ulong stringpointer;
 	ulong loadpointer;
@@ -138,7 +138,7 @@ struct SymbolResolve{
 
 enum
 {
-	C_OVL =0,
+	C_OVL = 0,
 	U_OVL
 };
 
@@ -163,26 +163,26 @@ struct MDLUnknownEnum
 {
 	enum EnumReverse
 	{
-		Unknown_1 =                 0x00000001, ///< 
-		Unknown_2 =                 0x00000002, ///< Always
-		Unknown_3 =					0x00000004, ///< Always
-		Unknown_4 =                 0x00000008, ///< 
-		Unknown_5 =					0x00000010, ///< 
-		Unknown_6 =					0x00000020, ///< 
-		Unknown_7 =                 0x00000040, ///< 
-		Unknown_8 =					0x00000080, ///< 
-		Unknown_9 =                 0x00000100, ///< 
-		Unknown_10 =                0x00000200, ///< Always
-		Unknown_11 =                0x00000400, ///< Always
-		Unknown_12 =				0x00000800, ///< 
-		Unknown_13 =                0x00001000, ///< 
-		Unknown_14 =                0x00002000, ///< 
-		Unknown_15 =                0x00004000, ///< 
-		Unknown_16 =                0x00008000, ///< 
-		Unknown_17 =				0x00010000, ///< AdultGiraffe, Gorilla, AdultGrizzly, Hippo, Zebra, 'CubLion', FemaleLion, AdultTiger, CubTiger, BabyOstrich, Leopard, Panther, FemaleAdultPolar, Rhino
-		Unknown_18 =                0x00020000, ///< Chimp, Giraffe, Gorilla, Grizzly, Hippo, Zebra, Kangaroo, 'CubLion', FemaleLion, AdultTiger, CubTiger, AdultOstrich, Panda, Baby/AdultPolar, Rhino
-		Unknown_19 =                0x00040000, ///< Camel, Elephant, Horse, 'CubLion', FemaleLion, AdultTiger, CubTiger, Mandrill, Orang, Leopard, Panther, Gazelle
-		Unknown_20 =                0x00080000, ///< MaleLion, high endangered?
+		Unknown_1 = 0x00000001, ///< 
+		Unknown_2 = 0x00000002, ///< Always
+		Unknown_3 = 0x00000004, ///< Always
+		Unknown_4 = 0x00000008, ///< 
+		Unknown_5 = 0x00000010, ///< 
+		Unknown_6 = 0x00000020, ///< 
+		Unknown_7 = 0x00000040, ///< 
+		Unknown_8 = 0x00000080, ///< 
+		Unknown_9 = 0x00000100, ///< 
+		Unknown_10 = 0x00000200, ///< Always
+		Unknown_11 = 0x00000400, ///< Always
+		Unknown_12 = 0x00000800, ///< 
+		Unknown_13 = 0x00001000, ///< 
+		Unknown_14 = 0x00002000, ///< 
+		Unknown_15 = 0x00004000, ///< 
+		Unknown_16 = 0x00008000, ///< 
+		Unknown_17 = 0x00010000, ///< AdultGiraffe, Gorilla, AdultGrizzly, Hippo, Zebra, 'CubLion', FemaleLion, AdultTiger, CubTiger, BabyOstrich, Leopard, Panther, FemaleAdultPolar, Rhino
+		Unknown_18 = 0x00020000, ///< Chimp, Giraffe, Gorilla, Grizzly, Hippo, Zebra, Kangaroo, 'CubLion', FemaleLion, AdultTiger, CubTiger, AdultOstrich, Panda, Baby/AdultPolar, Rhino
+		Unknown_19 = 0x00040000, ///< Camel, Elephant, Horse, 'CubLion', FemaleLion, AdultTiger, CubTiger, Mandrill, Orang, Leopard, Panther, Gazelle
+		Unknown_20 = 0x00080000, ///< MaleLion, high endangered?
 		//Note that the Horse and Zebra use the same animations, this enum could contain: endangered species level (high, low etc), Fencetype required, house required
 	};
 };
@@ -210,7 +210,7 @@ struct OVLData
 
 	std::vector<PreResolved>	presolvedfurtherdata;
 	std::vector<LinkedFiles>	linkedfiles;
-	OVLData(){
+	OVLData() {
 		hassymbolresolves = false;
 	}
 	ulong						postrelocunknown;
@@ -240,11 +240,11 @@ class OVLReader
 {
 private:
 	std::string		lasterror;
-	bool			ReadOVL(std::string ovlname, ulong currentOVL, int &offset);
+	bool			ReadOVL(std::string ovlname, ulong currentOVL, int& offset);
 	bool			ovlreaded;
-	std::string		GetStringA(FILE *&ovl, size_t size);
-	std::string		GetStringA(FILE *&ovl);
-	std::wstring	GetStringW(FILE *&ovl);
+	std::string		GetStringA(FILE*& ovl, size_t size);
+	std::string		GetStringA(FILE*& ovl);
+	std::wstring	GetStringW(FILE*& ovl);
 	OVLData			OVLD[2];
 public:
 	std::string		safefilename;
@@ -252,13 +252,13 @@ public:
 	std::string		ReturnDatablocknameFromOffset(ulong offset, bool striptag);
 
 	//INTERN	
-	std::vector<LinkedFiles>	GetRawLinkedFiles(ulong currentOVL){return OVLD[currentOVL].linkedfiles;};
-	std::vector<SymbolStruct>	GetRawSymbolReferences(ulong currentOVL){return OVLD[currentOVL].symbolpointers;};
-	std::vector<LoadReference>	GetRawLoaderReferences(ulong currentOVL){return OVLD[currentOVL].loaderreference;};
-	std::vector<SymbolResolve>	GetRawSymbolResolves(ulong currentOVL){return OVLD[currentOVL].symbolresolves;};
-	bool						IsValid(){return ovlreaded;}
-	OVLData						GetOVLD(ulong currentOVL){ return OVLD[currentOVL];}
-	std::string					GetLastReadingError(){return lasterror;}
+	std::vector<LinkedFiles>	GetRawLinkedFiles(ulong currentOVL) { return OVLD[currentOVL].linkedfiles; };
+	std::vector<SymbolStruct>	GetRawSymbolReferences(ulong currentOVL) { return OVLD[currentOVL].symbolpointers; };
+	std::vector<LoadReference>	GetRawLoaderReferences(ulong currentOVL) { return OVLD[currentOVL].loaderreference; };
+	std::vector<SymbolResolve>	GetRawSymbolResolves(ulong currentOVL) { return OVLD[currentOVL].symbolresolves; };
+	bool						IsValid() { return ovlreaded; }
+	OVLData						GetOVLD(ulong currentOVL) { return OVLD[currentOVL]; }
+	std::string					GetLastReadingError() { return lasterror; }
 	//EXTERN
 	std::string		PointerdataAtOffset(ulong offset);
 	Loader			GetLoaderByID(ulong id, ulong currentOVL);

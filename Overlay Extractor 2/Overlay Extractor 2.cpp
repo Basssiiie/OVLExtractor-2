@@ -6,11 +6,11 @@
 using namespace OverlayExtractor2;
 
 [STAThreadAttribute]
-int main(array<System::String ^> ^args)
+int main(array<System::String^>^ args)
 {
 	// Enabling Windows XP visual effects before any controls are created
 	Application::EnableVisualStyles();
-	Application::SetCompatibleTextRenderingDefault(false); 
+	Application::SetCompatibleTextRenderingDefault(false);
 
 	// Create the main window and run it
 	Application::Run(gcnew Form1(args));
